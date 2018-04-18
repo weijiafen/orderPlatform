@@ -1,6 +1,7 @@
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
 var good=require('../../modules/good.js');
+var label=require('../../modules/label.js');
 var Sequelize=require('sequelize')
 module.exports=(async (function(method,req,response){
 	var result={
@@ -16,11 +17,20 @@ module.exports=(async (function(method,req,response){
 			userId:uid
 		}
 		if(uid){
+			good.hasMany(label)
+			label.belongsTo(good);
 			var res=await(good.findAndCountAll({
 				'limit':parseInt(pageSize),
 				'offset':parseInt(pageSize*(page-1)),
 				'order':[['id']],
 				where:whereObj,
+				include:[
+					{
+						'order':[['label.id']],
+						model:label,
+					}
+				],
+				distinct: true
 			}))
 			if(res.rows.length>=0){
 				result.status=0;
@@ -35,7 +45,6 @@ module.exports=(async (function(method,req,response){
 		var name=req.body.name
 		var specifications=req.body.specifications
 		var unit=req.body.unit
-		var price=req.body.price
 		if(uid){
 			if(!name||name==""){
 				result={
@@ -43,18 +52,11 @@ module.exports=(async (function(method,req,response){
 					msg:"商品名称必须输入"
 				}
 			}
-			else if(!parseFloat(price)){
-				result={
-					status:-1,
-					msg:"价格参数不合法"
-				}
-			}
 			else{
 				var res=await(good.create({
 					name:name,
 					specifications:specifications,
 					unit:unit,
-					price:parseFloat(price),
 					userId:uid
 				}))
 				result.status=0;
@@ -73,7 +75,6 @@ module.exports=(async (function(method,req,response){
 		var name=req.body.name
 		var specifications=req.body.specifications
 		var unit=req.body.unit
-		var price=req.body.price
 		if(uid){
 			if(!name||name==""){
 				result={
@@ -81,18 +82,11 @@ module.exports=(async (function(method,req,response){
 					msg:"商品名称必须输入"
 				}
 			}
-			else if(!parseFloat(price)){
-				result={
-					status:-1,
-					msg:"价格参数不合法"
-				}
-			}
 			else{
 				var res=await(good.update({
 					name:name,
 					specifications:specifications,
 					unit:unit,
-					price:parseFloat(price),
 				},{
 					where:{
 						id:id,

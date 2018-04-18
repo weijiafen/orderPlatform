@@ -7,10 +7,10 @@ var captcha=require('./controler/captcha');
 var upload=require('./controler/upload');
 var login=require('./controler/manager/login.js');
 var logout=require('./controler/manager/logout.js');
-
-var category=require('./controler/manager/category.js');
 var goods=require('./controler/manager/goods.js');
 var label=require('./controler/manager/label.js');
+
+var category=require('./controler/manager/category.js');
 var stock=require('./controler/manager/stock.js');
 var goodOnline=require('./controler/manager/goodOnline.js');
 var desk=require('./controler/manager/desk.js');
@@ -93,6 +93,10 @@ module.exports=function(app){
 	//新增标签
 	app.post('/manager/label',function(req,res){
 		label('post',req,res);
+	})
+	//修改标签
+	app.put('/manager/label',function(req,res){
+		label('put',req,res);
 	})
 	//删除标签
 	app.delete('/manager/label',function(req,res){

@@ -17,12 +17,12 @@ var label = sequelize.define('label', {
     //标签名
     type: Sequelize.STRING
   },
-  bgColor:{
-    //背景颜色
-    type: Sequelize.STRING
-  },
   goodId:{
     //所属商品id
+    type:Sequelize.INTEGER,
+  },
+  price:{
+    //该标签下商品价格
     type:Sequelize.INTEGER,
   },
   createAt:{

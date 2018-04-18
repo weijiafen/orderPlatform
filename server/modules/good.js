@@ -29,10 +29,6 @@ var good = sequelize.define('good', {
     //商品单位
     type: Sequelize.STRING
   },
-  price:{
-    //商品价格
-    type:Sequelize.INTEGER,
-  },
   isDelete:{
     //商品是否被删除 1：删除 ， 0 ：未删除
     type:Sequelize.INTEGER,

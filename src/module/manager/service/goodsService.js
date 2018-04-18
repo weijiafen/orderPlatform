@@ -57,11 +57,22 @@ const Service = {
                 throw error;
             });
     },
-    deleteLabel:(data)=>{
+    setLabel:(data)=>{
+        return api
+            .put('/manager/label', {
+                data: data,
+            })
+            .then((res) => {
+                return res;
+            }, (error) => {
+                console.log('error ', error);
+                throw error;
+            });
+    },
+    deleteLabel:(id)=>{
         return api.delete('/manager/label',{
             params:{
-                id:data.id,
-                goodId:data.goodId
+                id:id
             }
         }).then((res)=>{
             return res

@@ -21,6 +21,10 @@ var Order = sequelize.define('order', {
   userId:{
     type:Sequelize.INTEGER,
   },
+  //订单所属商品ID
+  goodId:{
+    type:Sequelize.INTEGER,
+  },
   name: {
     //商品名
     type: Sequelize.STRING

@@ -1,7 +1,6 @@
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
 var good=require('../../modules/good.js');
-var category=require('../../modules/category.js');
 var label=require('../../modules/label.js');
 var Sequelize=require('sequelize')
 module.exports=(async (function(method,req,response){
@@ -13,8 +12,8 @@ module.exports=(async (function(method,req,response){
 		var uid=req.session.uid;
 		// var id=req.body.id;
 		var name=req.body.name
-		var bgColor=req.body.bgColor
 		var goodId=req.body.goodId
+		var price=req.body.price
 		if(uid){
 			if(!goodId){
 				result={
@@ -28,44 +27,64 @@ module.exports=(async (function(method,req,response){
 					msg:"标签名称必须输入"
 				}
 			}
-			else if(!bgColor||bgColor==""){
+			else if(!parseFloat(price)){
 				result={
 					status:-1,
-					msg:"标签背景色必须输入"
+					msg:"价格参数不合法"
 				}
 			}
 			else{
-				category.hasMany(good)
-				good.belongsTo(category);
-				//查询商品是该User的
-				var isAutor=await(good.findOne({
-					where:{
-						id:goodId
-					},
-					include:[{
-						model:category,
-						where:{
-							userId:uid,
-							id:Sequelize.col('good.categoryId')
-						}
-					}]
+				var res=await(label.create({
+					name:name,
+					goodId:goodId,
+					price:parseFloat(price),
 				}))
-				if(isAutor&&isAutor.dataValues.category){
-					var res=await(label.create({
-						name:name,
-						goodId:goodId,
-						bgColor:bgColor
-					}))
-					result.status=0;
-					result.msg="success"
-					result.data={
-						id:res.id,
-						name:res.name,
-						bgColor:res.bgColor
+				result.status=0;
+				result.msg="success"
+				result.data={
+				}
+				
+			}
+			
+		}
+	}
+	else if(method=='put'){
+		var uid=req.session.uid;
+		var id=req.body.id;
+		var name=req.body.name
+		// var goodId=req.body.goodId
+		var price=req.body.price
+		if(uid){
+			if(!id){
+				result={
+					status:-1,
+					msg:"规格id为空"
+				}
+			}
+			else if(!name||name==""){
+				result={
+					status:-1,
+					msg:"标签名称必须输入"
+				}
+			}
+			else if(!parseFloat(price)){
+				result={
+					status:-1,
+					msg:"价格参数不合法"
+				}
+			}
+			else{
+				var res=await(label.update({
+					name:name,
+					price:parseFloat(price),
+				},{
+					where:{
+						id:id
 					}
-				}else{
-					result.status=-1
-					result.msg="没有操作权限"
+				}))
+				result.status=0;
+				result.msg="success"
+				result.data={
 				}
 				
 			}
@@ -75,41 +94,20 @@ module.exports=(async (function(method,req,response){
 	else if(method=='delete'){
 		var uid=req.session.uid;
 		var id=req.query.id;
-		var goodId=req.query.goodId;
 		if(uid){
-			category.hasMany(good)
-			good.belongsTo(category);
-			//查询商品是该User的
-			var isAutor=await(good.findOne({
+			var res=await(label.destroy({
 				where:{
-					id:goodId
-				},
-				include:[{
-					model:category,
-					where:{
-						userId:uid,
-						id:Sequelize.col('good.categoryId')
-					}
-				}]
+					id:id
+				}
 			}))
-			if(isAutor&&isAutor.dataValues.category){
-				var res=await(label.destroy({
-					where:{
-						id:id
-					}
-				}))
-				if(res!=0){
-					result.status=0;
-					result.msg="success"
-					result.data={
-					}
-				}else{
-					result.status=-1;
-					result.msg="删除失败"
+			if(res!=0){
+				result.status=0;
+				result.msg="success"
+				result.data={
 				}
 			}else{
-				result.status=-1
-				result.msg="没有操作权限"
+				result.status=-1;
+				result.msg="删除失败"
 			}
 			
 		}

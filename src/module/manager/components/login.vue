@@ -1,7 +1,7 @@
 <template>
 	<div @keyup="show($event)">
 		<el-card class="login_box">
-			<h1>登录后台管理系统</h1>
+			<h1>登录订单管理系统</h1>
 			<el-form label-width="3rem">
 				<el-form-item label="账号">
 					<el-input v-model="account" />
