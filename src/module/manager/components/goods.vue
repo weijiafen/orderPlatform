@@ -32,11 +32,6 @@
                         border
                         style="width: 100%">
                         <el-table-column
-                          prop="id"
-                          label="id"
-                          width="100px">
-                        </el-table-column>
-                        <el-table-column
                           prop="name"
                           label="规格"
                           width="">
@@ -148,7 +143,9 @@ import goodsService from '../service/goodsService'
                 goodsService.getGoods().then(res=>{
                     if(res.status==0){
                         for(let good of res.data){
-                            good.labels.sort()
+                            good.labels.sort(function(a,b){
+                                return a.id-b.id
+                            })
                         }
                         this.goodList=res.data
                         this.loadingTable=false
