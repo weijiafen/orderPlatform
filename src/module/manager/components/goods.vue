@@ -176,6 +176,7 @@ import goodsService from '../service/goodsService'
                 this.dialogFormVisible=true
             },
             deleteGood(id){
+                this.loadingTable=true
                 goodsService.deleteGoods(id).then(res=>{
                     if(res.status==0){
                         this.$message.success('删除成功');
@@ -183,6 +184,7 @@ import goodsService from '../service/goodsService'
                     }else{
                         this.$message.error(res.msg);
                     }
+                    this.loadingTable=false
                 })
             },
             commitGood(){
@@ -192,28 +194,24 @@ import goodsService from '../service/goodsService'
                     if(this.form.id){
                         goodsService.setGoods(this.form).then(res=>{
                             if(res.status==0){
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogFormVisible=false;
+                            this.loadingForm=false;
                         })
                     }else{
                         goodsService.addGoods(this.form).then(res=>{
                             if(res.status==0){
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogFormVisible=false;
+                            this.loadingForm=false;
                         })
                     }
                   } else {
@@ -223,6 +221,7 @@ import goodsService from '../service/goodsService'
                 });
             },
             deleteLabel(id){
+                this.loadingTable=true
                 goodsService.deleteLabel(id).then(res=>{
                     if(res.status==0){
                         this.$message.success('删除成功');
@@ -230,6 +229,7 @@ import goodsService from '../service/goodsService'
                     }else{
                         this.$message.error(res.msg);
                     }
+                    this.loadingTable=false
                 })
             },
             addLabel(good){
@@ -255,28 +255,24 @@ import goodsService from '../service/goodsService'
                     if(this.lableObj.id){
                         goodsService.setLabel(this.lableObj).then(res=>{
                             if(res.status==0){
-                                this.dialogLabelVisible=false;
-                                this.loadingLabel=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                                this.dialogLabelVisible=false;
-                                this.loadingLabel=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogLabelVisible=false;
+                            this.loadingLabel=false;
                         })
                     }else{
                         goodsService.addLabel(this.lableObj).then(res=>{
                             if(res.status==0){
-                                this.dialogLabelVisible=false;
-                                this.loadingLabel=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                                this.dialogLabelVisible=false;
-                                this.loadingLabel=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogLabelVisible=false;
+                            this.loadingLabel=false;
                         })
                     }
                   } else {

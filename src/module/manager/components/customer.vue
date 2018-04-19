@@ -114,28 +114,24 @@ import customerService from '../service/customerService'
                     if(this.form.id){
                         customerService.setCustomer(this.form).then(res=>{
                             if(res.status==0){
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                            	this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogFormVisible=false;
+                            this.loadingForm=false;
                         })
                     }else{
                         customerService.addCustomer(this.form).then(res=>{
                             if(res.status==0){
-                                this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
-                            	this.dialogFormVisible=false;
-                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
+                            this.dialogFormVisible=false;
+                            this.loadingForm=false;
                         })
                     }
                   } else {
@@ -155,6 +151,7 @@ import customerService from '../service/customerService'
             	this.dialogFormVisible=true;
             },
             deleteCustomer(id){
+            	this.loadingTable=true;
             	customerService.deleteCustomer(id).then(res=>{
                     if(res.status==0){
                         this.$message.success('删除成功');
@@ -162,6 +159,7 @@ import customerService from '../service/customerService'
                     }else{
                         this.$message.error(res.msg);
                     }
+                    this.loadingTable=false
                 })
             }
         }
