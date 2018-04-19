@@ -6,10 +6,12 @@ var bodyParser=require('body-parser')
 var captcha=require('./controler/captcha');
 var upload=require('./controler/upload');
 var login=require('./controler/manager/login.js');
+var info=require('./controler/manager/info.js');
 var logout=require('./controler/manager/logout.js');
 var goods=require('./controler/manager/goods.js');
 var label=require('./controler/manager/label.js');
 var customer=require('./controler/manager/customer.js');
+var order=require('./controler/manager/order.js');
 
 var stock=require('./controler/manager/stock.js');
 var goodReport=require('./controler/manager/goodReport.js');
@@ -36,6 +38,10 @@ module.exports=function(app){
 	//获取验证码
 	app.get('/captcha',function(req,res){
 		captcha(req,res);
+	})
+	//获取session
+	app.get('/user/info',function(req,res){
+		info('get',req,res);
 	})
 	//上传文件接口
 	app.post('/upload',function(req,res){
@@ -88,6 +94,22 @@ module.exports=function(app){
 	//删除客户
 	app.delete('/manager/customer',function(req,res){
 		customer('delete',req,res);
+	})
+	//获取订单
+	app.get('/manager/order',function(req,res){
+		order('get',req,res);
+	})
+	//新增订单
+	app.post('/manager/order',function(req,res){
+		order('post',req,res);
+	})
+	//修改订单
+	app.put('/manager/order',function(req,res){
+		order('put',req,res);
+	})
+	//删除订单
+	app.delete('/manager/order',function(req,res){
+		order('delete',req,res);
 	})
 
 

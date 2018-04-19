@@ -1,6 +1,6 @@
 <template>
 	<div>
-        <el-menu :default-active="$route.path" theme="dark" mode="horizontal" menu-trigger="click" :router="true">
+        <el-menu :default-active="$route.path" theme="dark" mode="horizontal" menu-trigger="click" :router="true" class="noPrint">
             <el-menu-item index="/order">订单</el-menu-item>
             <el-menu-item index="/goods">商品</el-menu-item>
             <el-menu-item index="/customer">客户</el-menu-item>

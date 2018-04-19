@@ -23,5 +23,13 @@ const Service = {
                 throw error;
             });
     },
+    getInfo:()=>{
+        return api.get('/user/info')
+        .then((res)=>{
+            return res
+        },(error)=>{
+            throw error
+        })
+    },
 }
 export default Service
