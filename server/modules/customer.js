@@ -25,6 +25,10 @@ var customer = sequelize.define('customer', {
     //用户余额
     type:Sequelize.INTEGER,
   },
+  isDelete:{
+    //是否删除标记
+    type:Sequelize.INTEGER,
+  },
   createAt:{
     type:Sequelize.BIGINT
   },

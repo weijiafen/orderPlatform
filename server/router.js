@@ -9,6 +9,7 @@ var login=require('./controler/manager/login.js');
 var logout=require('./controler/manager/logout.js');
 var goods=require('./controler/manager/goods.js');
 var label=require('./controler/manager/label.js');
+var customer=require('./controler/manager/customer.js');
 
 var stock=require('./controler/manager/stock.js');
 var goodReport=require('./controler/manager/goodReport.js');
@@ -72,6 +73,24 @@ module.exports=function(app){
 	app.delete('/manager/label',function(req,res){
 		label('delete',req,res);
 	})
+	//获取客户
+	app.get('/manager/customer',function(req,res){
+		customer('get',req,res);
+	})
+	//新增客户
+	app.post('/manager/customer',function(req,res){
+		customer('post',req,res);
+	})
+	//修改客户
+	app.put('/manager/customer',function(req,res){
+		customer('put',req,res);
+	})
+	//删除客户
+	app.delete('/manager/customer',function(req,res){
+		customer('delete',req,res);
+	})
+
+
 	//查询商品报表
 	app.get('/manager/goodReport',function(req,res){
 		goodReport('get',req,res);

@@ -1,14 +1,19 @@
 import api from '../lib/axios/api';
 const Service = {
-    getDesks:()=>{
-        return api.get('/manager/desk').then((res)=>{
+    getCustomer:(page = 1 , pageSize = 10)=>{
+        return api.get('/manager/customer',{
+            params:{
+                page:page,
+                pageSize:pageSize
+            }
+        }).then((res)=>{
             return res
         },(error)=>{
             throw error
         })
     },
-    deleteDesk:(id)=>{
-        return api.delete('/manager/desk',{
+    deleteCustomer:(id)=>{
+        return api.delete('/manager/customer',{
             params:{id:id}
         }).then((res)=>{
             return res
@@ -16,9 +21,9 @@ const Service = {
             throw error
         })
     },
-    setDesk:(data)=>{
+    addCustomer:(data)=>{
         return api
-            .post('/manager/desk', {
+            .post('/manager/customer', {
                 data: data,
             })
             .then((res) => {
@@ -28,9 +33,9 @@ const Service = {
                 throw error;
             });
     },
-    modifyDesk:(data)=>{
+    setCustomer:(data)=>{
         return api
-            .put('/manager/desk', {
+            .put('/manager/customer', {
                 data: data,
             })
             .then((res) => {

@@ -26,7 +26,7 @@
             <el-table-column
               prop="label"
               label="商品规格">
-                <template scope="scope" >
+                <template scope="scope">
                     <el-table
                         :data="scope.row.labels"
                         border
@@ -63,6 +63,13 @@
               </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          class="pagination"
+          @current-change="changePage"
+          :total="total">
+        </el-pagination>
         <el-dialog title="商品信息" :visible.sync="dialogFormVisible">
             <div v-loading="loadingForm">
               <el-form :model="form" :rules="rules" ref="goodForm"> 
@@ -105,6 +112,8 @@ import goodsService from '../service/goodsService'
         data(){
             return {
                 goodList:[],
+                total:0,
+                pageNum:1,
                 dialogFormVisible:false,
                 dialogLabelVisible:false,
                 loadingForm:false,
@@ -140,7 +149,7 @@ import goodsService from '../service/goodsService'
         methods:{
             drawList(){
                 this.loadingTable=true
-                goodsService.getGoods().then(res=>{
+                goodsService.getGoods(this.pageNum).then(res=>{
                     if(res.status==0){
                         for(let good of res.data){
                             good.labels.sort(function(a,b){
@@ -148,6 +157,7 @@ import goodsService from '../service/goodsService'
                             })
                         }
                         this.goodList=res.data
+                        this.total=res.total;
                         this.loadingTable=false
                     }
                     
@@ -187,6 +197,8 @@ import goodsService from '../service/goodsService'
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
+                                this.dialogFormVisible=false;
+                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
                         })
@@ -198,6 +210,8 @@ import goodsService from '../service/goodsService'
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
+                                this.dialogFormVisible=false;
+                                this.loadingForm=false;
                                 this.$message.error(res.msg);
                             }
                         })
@@ -246,6 +260,8 @@ import goodsService from '../service/goodsService'
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
+                                this.dialogLabelVisible=false;
+                                this.loadingLabel=false;
                                 this.$message.error(res.msg);
                             }
                         })
@@ -257,6 +273,8 @@ import goodsService from '../service/goodsService'
                                 this.$message.success('保存成功');
                                 this.drawList();
                             }else{
+                                this.dialogLabelVisible=false;
+                                this.loadingLabel=false;
                                 this.$message.error(res.msg);
                             }
                         })
@@ -266,6 +284,10 @@ import goodsService from '../service/goodsService'
                     return false;
                   }
                 });
+            },
+            changePage(page){
+                this.pageNum=page;
+                this.drawList()
             }
         }
     }
@@ -281,23 +303,18 @@ import goodsService from '../service/goodsService'
             margin-bottom:4px;
         }
         .goodList{
-            .label{
-                border:1px solid #aaa;
-                padding:2px 6px;
-                display:inline-block;
-                border-radius:5px;
-                margin:4px 6px;
-            }
-            .el-tag{
-                margin:0 6px;
+            & > .el-table__body-wrapper .el-table__row >td:nth-child(4) > .cell{
+                padding-left:0;
+                padding-right:0;
             }
         }
         .dialog-footer{
             text-align:center;
         }
-        .el-table__body-wrapper .el-table_1_column_4>.cell{
-            padding-left:0;
-            padding-right:0;
+        
+        .pagination{
+            margin:10px;
+            text-align:center;
         }
     }
 </style>
