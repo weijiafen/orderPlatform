@@ -12,6 +12,8 @@ var goods=require('./controler/manager/goods.js');
 var label=require('./controler/manager/label.js');
 var customer=require('./controler/manager/customer.js');
 var order=require('./controler/manager/order.js');
+var settle=require('./controler/manager/settle.js');
+var chargeHistory=require('./controler/manager/chargeHistory.js');
 
 var stock=require('./controler/manager/stock.js');
 var goodReport=require('./controler/manager/goodReport.js');
@@ -111,7 +113,14 @@ module.exports=function(app){
 	app.delete('/manager/order',function(req,res){
 		order('delete',req,res);
 	})
-
+	//结算
+	app.post('/manager/settle',function(req,res){
+		settle('post',req,res);
+	})
+	//获取订单
+	app.get('/manager/chargeHistory',function(req,res){
+		chargeHistory('get',req,res);
+	})
 
 	//查询商品报表
 	app.get('/manager/goodReport',function(req,res){

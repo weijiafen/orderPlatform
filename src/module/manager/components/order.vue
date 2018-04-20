@@ -83,12 +83,12 @@
         </el-table> -->
         <div class="printPaper">
             <h2>{{userName}}（客户对账单）</h2>
-            <el-button class="payBtn noPrint" type="success" size="small">确认收款</el-button>
+            <el-button class="payBtn noPrint" type="success" size="small" @click="settleSubmit">确认结算</el-button>
             <p class="customerName">客户：{{findCustomer(fileterCustomer).name}}</p>
             <table class="orderList" v-loading="loadingTable">
                 <thead>
-                    <th>
-                        <el-checkbox></el-checkbox>
+                    <th class="noPrint">
+                        <el-checkbox v-model="ischeckAll" @change="toggleCheckAll"></el-checkbox>
                     </th>
                     <th>日期</th>
                     <th>品名</th>
@@ -97,14 +97,14 @@
                     <th>数量</th>
                     <th>单价</th>
                     <th>金额</th>
-                    <th>是否支付</th>
+                    <th>是否结算</th>
                     <th class="noPrint">是否出货</th>
                     <th class="noPrint">操作</th>
                 </thead>
                 <tbody>
                     <tr v-for="order in orderList">
-                        <td>
-                            <el-checkbox :disabled="!!order.isPay" v-model="order.isChecked"></el-checkbox>
+                        <td class="noPrint">
+                            <el-checkbox :disabled="!!order.isSettle" v-model="order.isChecked" @change="toggleCheckItem"></el-checkbox>
                         </td>
                         <td>{{parseDate(order.createAt)}}</td>
                         <td>{{order.name}}</td>
@@ -114,19 +114,20 @@
                         <td>{{order.price}}</td>
                         <td>{{order.count}}</td>
                         <td>
-                            <p v-if="order.isPay">已支付</p>
-                            <p v-else>未支付</p>
+                            <p v-if="order.isSettle">已结算</p>
+                            <p v-else>未结算</p>
                         </td>
                         <td class="noPrint">
                             <p v-if="order.status==1">备货中</p>
                             <p v-else-if="order.status==2">已出货</p>
                         </td>
                         <td class="noPrint">
-                            <el-button type="primary" size="mini" @click="editOrder(order)">修改</el-button>
-                            <el-button type="danger" size="mini" @click="deleteOrder(order.id)">删除</el-button>
+                            <el-button v-if="!order.isSettle" type="primary" size="mini" @click="editOrder(order)">修改</el-button>
+                            <el-button v-if="!order.isSettle" type="danger" size="mini" @click="deleteOrder(order.id)">删除</el-button>
                         </td>
                     </tr>
                     <tr>
+                        <td class="noPrint"></td>
                         <td>&nbsp;</td>
                         <td></td>
                         <td></td>
@@ -135,20 +136,19 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td class="noPrint"></td>
                         <td class="noPrint"></td>
                     </tr>
                     <tr>
+                        <td class="noPrint"></td>
                         <td>余款</td>
-                        <td>{{findCustomer(fileterCustomer).balance}}元</td>
-                        <td>本月货款：{{getAllCount()}}</td>
+                        <td>{{spareMoney}}元</td>
+                        <td></td>
+                        <td>本月货款：{{allCount}}</td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>应付货款：</td>
+                        <td>{{(spareMoney*100+allCount*100)/100}}</td>
                         <td class="noPrint"></td>
                         <td class="noPrint"></td>
                     </tr>
@@ -230,6 +230,9 @@ import moment from 'moment'
         			price:'',
                     status:"1"
         		},
+                ischeckAll:false,
+                allCount:0,
+                spareMoney:0
         	}
         },
         mounted(){
@@ -265,9 +268,13 @@ import moment from 'moment'
             		filterEndDate:filterEndDate,
             	}).then(res=>{
                     if(res.status==0){
+                        for(let order of res.data){
+                            order.isChecked=false;
+                        }
                         this.orderList=res.data
                         this.loadingTable=false;
                     }
+                    this.computedMoney()
             	})
             },
             addOrder(){
@@ -322,7 +329,10 @@ import moment from 'moment'
             	this.labelList=this.findLabelList(goodId);
             },
             changeLabel(labelId){
-            	this.order.price=this.findLabelPrice(labelId)
+                if(labelId){
+                    this.order.price=this.findLabelPrice(labelId)
+                }
+            	
             },
             findLabelList(goodId){
             	for(let good of this.goodList){
@@ -352,8 +362,30 @@ import moment from 'moment'
                 }
                 return ''
             },
-            changeCheckbox(v){
-                debugger
+            toggleCheckAll(){
+                var value=this.ischeckAll
+                if(value){
+                    for(let order of this.orderList){
+                        if(!order.isSettle){
+                            order.isChecked=true
+                        }
+                    }
+                }else{
+                    for(let order of this.orderList){
+                        if(!order.isSettle){
+                            order.isChecked=false
+                        }
+                    }
+                }
+            },
+            toggleCheckItem(){
+                let checkAll=true
+                for(let order of this.orderList){
+                    if(!order.isSettle&&!order.isChecked){
+                        checkAll=false
+                    }
+                }
+                this.ischeckAll=checkAll
             },
             deleteOrder(id){
                 orderService.deleteOrder(id).then(res=>{
@@ -363,13 +395,34 @@ import moment from 'moment'
                     }
                 })
             },
-            getAllCount(){
+            computedMoney(){
                 var allCount=0;
                 for(let order of this.orderList){
-                    var count=order.count
-                    allCount=(parseFloat(count)*100+allCount*100)/100
+                    if(!order.isSettle){
+                        var count=order.count
+                        allCount=(parseFloat(count)*100+allCount*100)/100
+                    }
+                    
                 }
-                return allCount
+                this.allCount=allCount
+                this.spareMoney=this.findCustomer(this.fileterCustomer).spareMoney
+            },
+            settleSubmit(){
+                var orderIds=[]
+                for(let order of this.orderList){
+                    if(!order.isSettle&&order.isChecked){
+                        orderIds.push(order.id)
+                    }
+                }
+                orderService.postSettle({
+                    orderIds:orderIds
+                }).then(res=>{
+                    if(res.status==0){
+                        this.$message.success('结算成功');
+                        this.findCustomer(this.fileterCustomer).spareMoney=res.data.spareMoney
+                        this.drawList();
+                    }
+                })
             }
         }
     }

@@ -1,6 +1,7 @@
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
 var customer=require('../../modules/customer.js');
+var chargeHistory=require('../../modules/chargeHistory.js');
 var Sequelize=require('sequelize')
 module.exports=(async (function(method,req,response){
 	var result={
@@ -30,7 +31,7 @@ module.exports=(async (function(method,req,response){
 	else if(method=='post'){
 		var uid=req.session.uid;
 		var name=req.body.name
-		var balance=req.body.balance
+		var spareMoney=req.body.spareMoney
 		if(uid){
 			if(!name||name==""){
 				result={
@@ -42,7 +43,7 @@ module.exports=(async (function(method,req,response){
 				var res=await(customer.create({
 					name:name,
 					userId:uid,
-					balance:parseFloat(balance)
+					spareMoney:parseFloat(spareMoney)
 				}))
 				result.status=0;
 				result.msg="success"
@@ -57,7 +58,7 @@ module.exports=(async (function(method,req,response){
 		var uid=req.session.uid;
 		var id=req.body.id;
 		var name=req.body.name
-		var balance=req.body.balance
+		var spareMoney=req.body.spareMoney
 		if(uid){
 			if(!name||name==""){
 				result={
@@ -65,7 +66,7 @@ module.exports=(async (function(method,req,response){
 					msg:"客户名称必须输入"
 				}
 			}
-			else if(!parseFloat(balance)){
+			else if(!parseFloat(spareMoney)){
 				result={
 					status:-1,
 					msg:"充值金额不合法"
@@ -79,10 +80,16 @@ module.exports=(async (function(method,req,response){
 					}
 				}))
 				if(res){
-					balance=parseInt(res.dataValues.balance*100+balance*100)/100
+					var chargeRes=await(chargeHistory.create({
+						money:spareMoney,
+						customerId:id,
+						userId:uid,
+						createAt:new Date().valueOf()
+					}))
+					spareMoney=parseInt(res.dataValues.spareMoney*100-spareMoney*100)/100
 					var updateRes=await(customer.update({
 						name:name,
-						balance:balance
+						spareMoney:spareMoney
 					},{
 						where:{
 							id:id,

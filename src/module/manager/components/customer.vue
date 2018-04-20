@@ -1,7 +1,7 @@
 <template>
 	<div class="customer">
 		<h2 class="title">客户列表</h2>
-        <el-button type="primary" class="add_customer" @click="addCustomer">新增商品</el-button>
+        <el-button type="primary" class="add_customer" @click="addCustomer">新增客户</el-button>
 		<el-table
             :data="customerList"
             border
@@ -19,8 +19,8 @@
               width="">
             </el-table-column>
             <el-table-column
-              prop="balance"
-              label="余额"
+              prop="spareMoney"
+              label="余款"
               width="">
             </el-table-column>
             <el-table-column
@@ -28,8 +28,9 @@
               label="操作"
               width="">
             	<template scope="scope">
-            		<el-button type="info" size="small" @click="editCustomer(scope.row)">充值</el-button>
+            		<el-button type="info" size="small" @click="editCustomer(scope.row)">还款</el-button>
             		<el-button type="danger" size="small" @click="deleteCustomer(scope.row.id)">删除</el-button>
+                    <a :href="'#/chargeHistory/'+scope.row.id">还款记录</a>
             	</template>
             </el-table-column>
         </el-table>
@@ -46,8 +47,8 @@
                 <el-form-item label="客户姓名" label-width="120px" prop="name">
                   <el-input v-model="form.name" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="余额" label-width="120px" prop="balance">
-                    <el-input v-model.number="form.balance"></el-input>
+                <el-form-item label="还款金额" label-width="120px" prop="spareMoney">
+                    <el-input v-model.number="form.spareMoney"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -76,12 +77,12 @@ import customerService from '../service/customerService'
         		form:{
         			id:null,
         			name:'',
-        			balance:0
+        			spareMoney:0
         		},
         		rules:{
                     name:[{required: true, message: '请输入客户姓名', trigger: 'blur'}],
-                    balance:[{required: true, message: '请输入充值金额'},
-                        {type:'number',message:'充值金额必须是数值',trigger:'blur'}]
+                    spareMoney:[{required: true, message: '请输入还款金额'},
+                        {type:'number',message:'还款金额必须是数值',trigger:'blur'}]
                 }
         	}
         },
@@ -104,7 +105,7 @@ import customerService from '../service/customerService'
             addCustomer(){
             	this.form.id=null
             	this.form.name=''
-            	this.form.balance=0
+            	this.form.spareMoney=0
             	this.dialogFormVisible=true
             },
             commitForm(){
@@ -147,7 +148,7 @@ import customerService from '../service/customerService'
             editCustomer(customer){
             	this.form.id=customer.id
             	this.form.name=customer.name
-            	this.form.balance=0
+            	this.form.spareMoney=0
             	this.dialogFormVisible=true;
             },
             deleteCustomer(id){

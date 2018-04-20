@@ -54,7 +54,7 @@ var Order = sequelize.define('order', {
     type: Sequelize.STRING 
   },
   //是否支付,0未支付，1已支付
-  isPay:{
+  isSettle:{
     type:Sequelize.INTEGER,
   },
   //订单状态，1备货中，2已出货，3取消

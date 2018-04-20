@@ -21,24 +21,7 @@ const Service = {
                 throw error;
             });
     },
-    getGoodReport:(data)=>{
-        return api.get('/manager/goodReport',{
-            params:data
-        }).then((res)=>{
-            return res
-        },(error)=>{
-            throw error
-        })
-    },
-    getSaleReport:(data)=>{
-        return api.get('/manager/saleReport',{
-            params:data
-        }).then((res)=>{
-            return res
-        },(error)=>{
-            throw error
-        })
-    },
+    
     putOrder:(data)=>{
         return api
             .put('/manager/order', {
@@ -60,6 +43,35 @@ const Service = {
             throw error
         })
     },
-    
+    postSettle:(data)=>{
+        return api
+            .post('/manager/settle', {
+                data: data,
+            })
+            .then((res) => {
+                return res;
+            }, (error) => {
+                console.log('error ', error);
+                throw error;
+            });
+    },
+    getGoodReport:(data)=>{
+        return api.get('/manager/goodReport',{
+            params:data
+        }).then((res)=>{
+            return res
+        },(error)=>{
+            throw error
+        })
+    },
+    getSaleReport:(data)=>{
+        return api.get('/manager/saleReport',{
+            params:data
+        }).then((res)=>{
+            return res
+        },(error)=>{
+            throw error
+        })
+    },
 }
 export default Service

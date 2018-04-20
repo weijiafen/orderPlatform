@@ -44,6 +44,19 @@ const Service = {
                 console.log('error ', error);
                 throw error;
             });
-    }
+    },
+    getChargeHistory:(customerId,page = 1 , pageSize = 10)=>{
+        return api.get('/manager/chargeHistory',{
+            params:{
+                page:page,
+                pageSize:pageSize,
+                customerId:customerId
+            }
+        }).then((res)=>{
+            return res
+        },(error)=>{
+            throw error
+        })
+    },
 }
 export default Service

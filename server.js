@@ -23,27 +23,3 @@ app.get('/', function (req, res) {
 			}
 	})
 })
-app.get('/custom', function (req, res) {
-		fs.readFile('dist/custom.html',function(err,data){
-			if(err){
-				res.end('404');
-			}
-			else{
-				res.end(data.toString());
-			}
-	})
-})
-global.sockets={};
-io.sockets.on('connection', function (socket) {
-  var shopId=socket.handshake.query.shopId
-  socket.shopId=shopId
-  console.log("new connection")
-  global.sockets[shopId]=socket
-  socket.on('disconnect', function (data) {
-    delete global.sockets[socket.shopId]
-  });
-  socket.on('SHeartBeat', function (data) {
-	console.log("recieve HeartBeat",data)
-  	socket.emit("CHeartBeat",{})
-  });
-});

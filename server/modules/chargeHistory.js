@@ -6,28 +6,25 @@ var sequelize = new Sequelize(dbConfig.dbName, dbConfig.user, dbConfig.password,
   dialect: 'mysql',
   pool: dbConfig.pool,
 });
-var customer = sequelize.define('customer', {
-  //客户id
+var chargeHistory = sequelize.define('chargeHistory', {
+  //还款记录id
   id:{
     type:Sequelize.INTEGER,
     primaryKey:true,
     autoIncrement: true
   },
+  money: {
+    //还款金额
+    type: Sequelize.INTEGER,
+    'unique': true   
+  },
+  //客户id
+  customerId: {
+    type: Sequelize.INTEGER
+  },
+  //用户id
   userId:{
-    //客户所属商家
-    type:Sequelize.INTEGER
-  },
-  //客户名
-  name:{
-    type: Sequelize.STRING
-  },
-  spareMoney:{
-    //用户余额
-    type:Sequelize.INTEGER,
-  },
-  isDelete:{
-    //是否删除标记
-    type:Sequelize.INTEGER,
+    type: Sequelize.INTEGER
   },
   createAt:{
     type:Sequelize.BIGINT
@@ -39,4 +36,4 @@ var customer = sequelize.define('customer', {
   freezeTableName: true, // Model tableName will be the same as the model name
   timestamps: false
 });
-module.exports=customer
+module.exports=chargeHistory

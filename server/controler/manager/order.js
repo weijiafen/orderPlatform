@@ -99,7 +99,7 @@ module.exports=(async (function(method,req,response){
 					price:price,
 					number:number,
 					count:count,
-					isPay:0,
+					isSettle:0,
 					status:parseInt(status),
 					createAt:new Date().valueOf()
 				}))
@@ -145,7 +145,7 @@ module.exports=(async (function(method,req,response){
 					price:price,
 					number:number,
 					count:count,
-					isPay:0,
+					isSettle:0,
 					status:parseInt(status),
 					updateAt:new Date().valueOf()
 				},{

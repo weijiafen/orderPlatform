@@ -23,7 +23,6 @@ var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? 'cheap-module-source-map' : false,
    entry: {
           manager:'./src/module/manager/manager.js',
-          customer:'./src/module/customer/customer.js',
           vendor: ['vue','vuex','vue-router','axios']
     },
   output: {

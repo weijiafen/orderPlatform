@@ -6,6 +6,7 @@ const Order = resolve => require(['../components/order.vue'], resolve)
 const Goods = resolve => require(['../components/goods.vue'], resolve)
 const Customer = resolve => require(['../components/customer.vue'], resolve)
 const Report = resolve => require(['../components/report.vue'], resolve)
+const ChargeHistory=resolve => require(['../components/chargeHistory.vue'], resolve)
 Vue.use(Router)
 export default new Router({
     routes: [
@@ -34,6 +35,10 @@ export default new Router({
                 {
                     path:"report",
                     component:Report
+                },
+                {
+                    path:"chargeHistory/:customerId",
+                    component:ChargeHistory
                 },
         	]
         }
