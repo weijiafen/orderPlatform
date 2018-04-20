@@ -37,11 +37,6 @@
                           width="">
                         </el-table-column>
                         <el-table-column
-                          prop="price"
-                          label="价格（元）"
-                          width="">
-                        </el-table-column>
-                        <el-table-column
                           prop=""
                           label="操作"
                           width="160px">
@@ -91,9 +86,6 @@
               <el-form :model="lableObj" :rules="rules2" ref="labelForm"> 
                 <el-form-item label="规格" label-width="120px" prop="name">
                   <el-input v-model="lableObj.name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="价格" label-width="120px" prop="price">
-                    <el-input v-model.number="lableObj.price"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">

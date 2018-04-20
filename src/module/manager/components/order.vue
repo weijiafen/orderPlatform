@@ -28,59 +28,6 @@
 			<el-button type="primary" class="add_customer" @click="addOrder">新增订单</el-button>
             <el-button type="success" class="add_customer" @click="printOrder">打印订单</el-button>
 		</el-form>
-        <!-- <el-table
-            :data="orderList"
-            border
-            v-loading="loadingTable"
-            class="orderList">
-            <el-table-column
-              prop="createAt"
-              label="日期"
-              width="100">
-              <template scope="scope">
-                  {{parseDate(scope.row.createAt)}}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              label="品名"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              prop="label"
-              label="规格"
-              width="">
-            </el-table-column>
-            <el-table-column
-              prop="unit"
-              label="单位"
-              width="50">
-            </el-table-column>
-            <el-table-column
-              prop="number"
-              label="数量"
-              width="70">
-            </el-table-column>
-            <el-table-column
-              prop="price"
-              label="单价"
-              width="60">
-            </el-table-column>
-            <el-table-column
-              prop="count"
-              label="金额"
-              width="90">
-            </el-table-column>
-            <el-table-column
-              prop="isPay"
-              label="是否支付"
-              width="80">
-              <template scope="scope">
-                  <p v-if="scope.row.isPay==1">已付款</p>
-                  <p v-else>未付款</p>
-              </template>
-            </el-table-column>
-        </el-table> -->
         <div class="printPaper">
             <h2>{{userName}}（客户对账单）</h2>
             <el-button class="payBtn noPrint" type="success" size="small" @click="settleSubmit">确认结算</el-button>
@@ -169,7 +116,7 @@
 				    </el-select>
                 </el-form-item>
                 <el-form-item label="商品规格" label-width="120px">
-                	<el-select v-model="order.labelId" placeholder="请选择规格" @change="changeLabel">
+                	<el-select v-model="order.labelId" placeholder="请选择规格">
 				      <el-option v-for="label in labelList" :label="label.name" :value="label.id"></el-option>
 				    </el-select>
                 </el-form-item>
@@ -183,7 +130,7 @@
                     <el-input v-model.number="order.number"></el-input>
                 </el-form-item>
                 <el-form-item label="单价" label-width="120px" >
-                    ￥{{order.price}}
+                    <el-input v-model.number="order.price"></el-input>
                 </el-form-item>
                 <el-form-item label="总价" label-width="120px" >
                     ￥<span class="money">{{(order.price*100*order.number)/100}}</span>
@@ -220,7 +167,7 @@ import moment from 'moment'
                 orderList:[],
         		fileterCustomer:'',
         		fileterStatus:'',
-        		daterange:[null,null],
+        		daterange:[new Date(),new Date()],
         		order:{
         			id:null,
         			customerId:'',
@@ -327,12 +274,6 @@ import moment from 'moment'
             changeGood(goodId){
             	this.order.labelId=''
             	this.labelList=this.findLabelList(goodId);
-            },
-            changeLabel(labelId){
-                if(labelId){
-                    this.order.price=this.findLabelPrice(labelId)
-                }
-            	
             },
             findLabelList(goodId){
             	for(let good of this.goodList){

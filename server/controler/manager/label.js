@@ -13,7 +13,7 @@ module.exports=(async (function(method,req,response){
 		// var id=req.body.id;
 		var name=req.body.name
 		var goodId=req.body.goodId
-		var price=req.body.price
+		// var price=req.body.price
 		if(uid){
 			if(!goodId){
 				result={
@@ -27,17 +27,11 @@ module.exports=(async (function(method,req,response){
 					msg:"标签名称必须输入"
 				}
 			}
-			else if(!parseFloat(price)){
-				result={
-					status:-1,
-					msg:"价格参数不合法"
-				}
-			}
 			else{
 				var res=await(label.create({
 					name:name,
 					goodId:goodId,
-					price:parseFloat(price),
+					price:0,
 				}))
 				result.status=0;
 				result.msg="success"
@@ -53,7 +47,7 @@ module.exports=(async (function(method,req,response){
 		var id=req.body.id;
 		var name=req.body.name
 		// var goodId=req.body.goodId
-		var price=req.body.price
+		// var price=req.body.price
 		if(uid){
 			if(!id){
 				result={
@@ -67,16 +61,10 @@ module.exports=(async (function(method,req,response){
 					msg:"标签名称必须输入"
 				}
 			}
-			else if(!parseFloat(price)){
-				result={
-					status:-1,
-					msg:"价格参数不合法"
-				}
-			}
 			else{
 				var res=await(label.update({
 					name:name,
-					price:parseFloat(price),
+					price:0,
 				},{
 					where:{
 						id:id

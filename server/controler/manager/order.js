@@ -73,6 +73,7 @@ module.exports=(async (function(method,req,response){
 			var labelId=req.body.labelId
 			var number=req.body.number
 			var status=req.body.status
+			var price=req.body.price
 			var labelRes=await(label.findOne({
 				where:{
 					id:labelId,
@@ -86,7 +87,7 @@ module.exports=(async (function(method,req,response){
 				}
 			}))
 			if(labelRes){
-				var price=labelRes.dataValues.price
+				// var price=labelRes.dataValues.price
 				var count=parseInt(price*100*number)/100
 				var orderRes=await(order.create({
 					customerId:customerId,
@@ -117,6 +118,7 @@ module.exports=(async (function(method,req,response){
 		var labelId=req.body.labelId
 		var number=req.body.number
 		var status=req.body.status
+		var price=req.body.price
 		var id=req.body.id
 		if(uid){
 			var labelRes=await(label.findOne({
@@ -132,7 +134,7 @@ module.exports=(async (function(method,req,response){
 				}
 			}))
 			if(labelRes){
-				var price=labelRes.dataValues.price
+				// var price=labelRes.dataValues.price
 				var count=parseInt(price*100*number)/100
 				var orderRes=await(order.update({
 					customerId:customerId,
